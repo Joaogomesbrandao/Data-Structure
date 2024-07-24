@@ -13,7 +13,7 @@ public class insertionSortRecursivo {
     }
 
     private static void insertRecursivo(int[] v, int index){
-        if (index == v.length) return;
+        if (index >= v.length) return;
         int j = index;
         while (j > 0 && v[j] < v[j-1]){
             swapp(v,j,j-1);
