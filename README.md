@@ -1,2 +1,3 @@
-# Estrutura-de-Dados
-aqui você encontrará algoritmos de ordenação e estruturas para programação.
+# Estrutura-de-Dados.
+
+Here, you will find sorting algorithms and data structure.
