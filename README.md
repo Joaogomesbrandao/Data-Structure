@@ -1,3 +1,3 @@
-# Estrutura-de-Dados.
+# data-structure
 
-Here, you will find sorting algorithms and data structure.
+you will find sorting algorithms and data structure here.
