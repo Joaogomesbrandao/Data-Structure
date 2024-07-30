@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class quickSortLomuto {
+public class quickSort {
     public static void main(String[] args){
         int[] v = new int[]{7, 8, 1, 2, 90, 4, 65, 32};
         sort(v, 0, v.length-1);
