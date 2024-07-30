@@ -14,7 +14,7 @@ public class quickSortLomuto {
      */
     private static void sort(int[] v, int left, int rigth){
         if (left < rigth){
-            int i_pivot = lomuto(v, left, rigth);
+            int i_pivot = hoare(v, left, rigth);
             sort(v, left, i_pivot-1);
             sort(v, i_pivot+1, rigth);
         }
@@ -94,6 +94,30 @@ public class quickSortLomuto {
         if (values[1] == v[ini]) return ini;
         else if (values[1] == v[mid]) return mid;
         else return fim;
+    }
+
+    /**
+     * Private method that applies the Hoare strategy of partition.
+     */
+    private static int hoare(int[] v, int left, int right){
+        int i = left + 1;
+        int j = right;
+        int pivot = v[left];
+
+        while(i <= j){
+            while(i <= j && v[i] <= pivot){
+                i++;
+            }
+            while (i <= j && v[j] > pivot){
+                j -= 1;
+            }
+            if (i < j){
+                swapp(v, i, j);
+            }
+        }
+
+        swapp(v, left, j);
+        return j;
     }
 
     /**

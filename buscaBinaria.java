@@ -9,6 +9,7 @@ public class buscaBinaria {
         int[] v = new int[vetor.length];
         for (int k=0;k<vetor.length;k++) v[k] = Integer.parseInt(vetor[k]);
         System.out.println(busca(v,num,0,v.length-1));
+        sc.close();
     }
 
     public static int busca(int[] v, int num, int ini, int fim){

@@ -10,6 +10,7 @@ public class selectionSortRecursivo {
             v[k] = Integer.parseInt(arr[k]);
         }
         selection(v,0);
+        sc.close();
     }
 
     private static void selection(int[] v, int index){

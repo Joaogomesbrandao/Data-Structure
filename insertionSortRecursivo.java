@@ -10,6 +10,7 @@ public class insertionSortRecursivo {
             v[k] = Integer.parseInt(arr[k]);
         }
         insertRecursivo(v,1);
+        sc.close();
     }
 
     private static void insertRecursivo(int[] v, int index){
