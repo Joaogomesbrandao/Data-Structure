@@ -17,54 +17,69 @@ public class LinkedList{
     }
 
     public boolean isEmpty(){
-        return head == null && tail == null;
+        return this.head == null && this.tail == null;
     }
 
-    public void addLast(int value){
-        Node newNode = new Node(value);
+    public int getFirst(){
+        if (isEmpty()) throw new NoSuchElementException();
+        return this.head.value;
+    }
 
+    public int getLast(){
+        if (isEmpty()) throw new NoSuchElementException();
+        return this.tail.value;
+    }
+
+    public int get(int index){
+        if (index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
+
+        Node aux = this.head;
+        for (int i = 0; i < index; i++){
+            aux = aux.next;
+        }
+
+        return aux.value;
+    }
+
+    public void addFirst(int number){
+        Node newNode = new Node(number);
         if (isEmpty()){
-            head = newNode;
-            tail = newNode;
-        } else{
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
+            this.head.prev = newNode;
+            newNode.next = this.head;
+            this.head = newNode;
+        }
+
+        this.size += 1;
+    }
+
+    public void addLast(int number){
+        Node newNode = new Node(number);
+        if (isEmpty()){
+            this.head = newNode;
+            this.tail = newNode;
+        } else {
             this.tail.next = newNode;
             newNode.prev = this.tail;
-            tail = newNode;
-        }
-        this.size += 1;
-    }
-
-    public void addFirst(int value){
-        Node newNode = new Node(value);
-
-        if (isEmpty()){
-            head = newNode;
-            tail = newNode;
-        } else{
-            newNode.next = this.head;
-            this.head.prev = newNode;
-            head = newNode;
+            this.tail = newNode;
         }
 
         this.size += 1;
     }
 
+    public void add(int index, int number){
+        if (index < 0 || index > this.size) throw new IndexOutOfBoundsException();
 
-    public void add(int index, int value){
-        if (index < 0 || index >= this.size){
-            throw new IndexOutOfBoundsException();
-        }
+        Node newNode = new Node(number);
 
-        Node newNode = new Node(value);
-
-        if (index == 0){
-            addFirst(value);
-        } else if(index == this.size-1){
-            addLast(value);
-        } else{
-
+        if (index == 0) addFirst(number);
+        else if (index == this.size - 1) addLast(number);
+        else {
             Node aux = this.head;
-            for (int i = 0; i < index -1; i++){
+
+            for (int i = 0; i < index - 1; i++){
                 aux = aux.next;
             }
 
@@ -72,61 +87,19 @@ public class LinkedList{
             aux.next = newNode;
             newNode.next.prev = newNode;
             newNode.prev = aux;
+            
+            this.size += 1;
         }
-
-        this.size += 1;
-    }
-
-    public int get(int index){
-        if (index < 0 || index >= this.size){
-            throw new IndexOutOfBoundsException();
-        }
-
-        Node aux = this.head;
-
-        for (int j = 0; j < index; j++){
-            aux = aux.next;
-        }
-
-        return aux.value;
-    }
-
-    public int indexOf(int value){
-        Node aux = this.head;
-        int i = 0;
-
-        while(aux != null){
-            if (aux.value == value) return i;
-            aux = aux.next;
-            i++;
-        }
-
-        return -1;
-    }
-
-    public boolean contains(int value){
-        return indexOf(value) != -1;
-    }
-
-    public int getFirst(){
-        if (isEmpty()) throw new RuntimeException();
-        return this.head.value;
-    }
-
-    public int getLast(){
-        if (isEmpty()) throw new RuntimeException();
-        return this.tail.value;
     }
 
     public int removeFirst(){
         if (isEmpty()) throw new NoSuchElementException();
 
         int oldValue = this.head.value;
-
-        if (this.head.next == null){
+        if (this.size == 1){
             this.head = null;
             this.tail = null;
-        } else{
+        } else {
             this.head = this.head.next;
             this.head.prev = null;
         }
@@ -137,13 +110,12 @@ public class LinkedList{
 
     public int removeLast(){
         if (isEmpty()) throw new NoSuchElementException();
-
+        
         int oldValue = this.tail.value;
-
-        if (this.head.next == null){
+        if (this.size == 1){
             this.head = null;
             this.tail = null;
-        } else{
+        } else {
             this.tail = this.tail.prev;
             this.tail.next = null;
         }
@@ -153,24 +125,90 @@ public class LinkedList{
     }
 
     public int remove(int index){
-        if (index < 0 || index >= this.size){
-            throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
+
+        if (index == 0) return removeFirst();
+        else if (index == this.size - 1) return removeLast();
+        else {
+            Node aux = this.head;
+            for (int i = 0; i < index; i++){
+                aux = aux.next;
+            }
+
+            aux.prev.next = aux.next;
+            aux.next.prev = aux.prev;
+
+            this.size -= 1;
+            return aux.value;
         }
+    }
 
-        if (index == 0) removeFirst();
-        if (index == this.size - 1) removeLast();
-
+    public boolean removeByValue(int number){
         Node aux = this.head;
 
-        for (int i = 0; i < index; i++){
+        for (int j = 0; j < this.size; j++){
+            if (aux.value == number){
+                if (j == 0){
+                    removeFirst();
+                    return true;
+                } else if (j == this.size - 1){
+                    removeLast();
+                    return true;
+                } else {
+                    aux.prev.next = aux.next;
+                    aux.next.prev = aux.prev;
+
+                    this.size -= 1;
+                    return true;
+                }
+            }
             aux = aux.next;
         }
 
-        aux.prev.next = aux.next;
-        aux.next.prev = aux.prev;
+        return false;
+    }
 
-        this.size -= 1;
-        return aux.value;
+    public int indexOf(int number){
+        Node aux = this.head;
+
+        for (int i = 0; i < this.size; i++){
+            if (aux.value == number) return i;
+            aux = aux.next;
+        }
+
+        return -1;
+    }
+
+    public boolean contains(int number){
+        return indexOf(number) != 1;
+    }
+
+    public int lastIndexOf(int number){
+        int k = -1;
+        Node aux = this.head;
+
+        for (int j = 0; j < this.size; j++){
+            if (aux.value == number) k = j;
+            aux = aux.next;
+        }
+
+        return k;
+    }
+
+    public String toString() {
+        if (isEmpty()) return "";
+
+        Node aux = this.head;
+        String out = "";
+        while (aux != null) {
+            out += aux.value + ", ";
+            aux = aux.next;
+        }
+        return out.substring(0, out.length() - 2);
+    }
+
+    public int size(){
+        return this.size;
     }
 }
 
