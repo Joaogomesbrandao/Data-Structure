@@ -1,3 +1,4 @@
+package Structures;
 /**
  * This class represents he creation of an Queue
  * based on integers;

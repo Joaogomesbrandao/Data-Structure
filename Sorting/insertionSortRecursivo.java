@@ -1,29 +1,28 @@
+package Sorting;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class selectionSortRecursivo {
-    public static void main(String[] args){
+public class insertionSortRecursivo {
+     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         String[] arr = sc.nextLine().split(" ");
         int[] v = new int[arr.length];
         for (int k=0;k<arr.length;k++){
             v[k] = Integer.parseInt(arr[k]);
         }
-        selection(v,0);
+        insertRecursivo(v,1);
         sc.close();
     }
 
-    private static void selection(int[] v, int index){
-        if (index == v.length-1) return;
-        int indexMenor = index;
-        for (int j = 1+index; j<v.length;j++){
-                if (v[j] < v[indexMenor]){
-                    indexMenor= j;
-                }
-            }
-        swapp(v,index,indexMenor);
+    private static void insertRecursivo(int[] v, int index){
+        if (index >= v.length) return;
+        int j = index;
+        while (j > 0 && v[j] < v[j-1]){
+            swapp(v,j,j-1);
+            j--;
+        }
         System.out.println(Arrays.toString(v));
-        selection(v,index+1);
+        insertRecursivo(v,index+1);
     }
 
     private static void swapp(int[] v, int index1, int index2){

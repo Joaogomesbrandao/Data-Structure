@@ -1,3 +1,4 @@
+package Structures;
 /**
  * This class represents the creation of an arraylist
  * based on an array of integers.
