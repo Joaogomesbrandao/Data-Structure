@@ -1,193 +1,329 @@
 package Structures;
-public class BST{
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
 
-	Node root;
-	int size;
+public class BST {
+    
+    Node root;
+    int size;
 
-	public BST(){
-		this.root = null;
-		this.size = 0;
-	}
+    public BST(){
+        this.root = null;
+        this.size = 0;
+    }
 
-	public boolean isEmpty(){
-		return this.root == null;
-	}
+    public boolean isEmpty(){
+        return this.root == null;
+    }
 
-	/**
-	 * This method adds the new Node interactively.
-	 */
-	public void add(int v){
-		this.size += 1;
-		
-		if (isEmpty()){
-			this.root = new Node(v);
-		} else {
-			Node aux = this.root;
+    public void add(int elem){
+        this.size += 1;
 
-			while(aux != null){
-				if (v < aux.value){
-					if (aux.left == null){
-						Node newNode = new Node(v);
-						aux.left = newNode;
-						newNode.parent = aux;
-						return;
-					}
-					aux = aux.left;
-				} else {
-					if (aux.right == null){
-						Node newNode = new Node(v);
-						aux.right = newNode;
-						newNode.parent = aux;
-						return;
-					}
-					aux = aux.right;
-				}
-			}
-		}
-	}
+        if (isEmpty()){
+            this.root = new Node(elem);
+        } else {
+            Node aux = this.root;
 
-	public void recursiveAdd(int v){
-		this.size += 1;
-		if (isEmpty()){
-			this.root = new Node(v);
-		} else {
-			recursiveAdd(this.root,v);
-		}
+            while(aux != null){
+                if (elem < aux.value){
+                    if (aux.left == null){
+                        Node newNode = new Node(elem);
+                        aux.left = newNode;
+                        newNode.parent = aux;
+                        return;
+                    }
+                    aux = aux.left;
+                } else {
+                    if (aux.right == null){
+                        Node newNode = new Node(elem);
+                        aux.right = newNode;
+                        newNode.parent = aux;
+                        return;
+                    }
+                    aux = aux.right;
+                }
+            }
+        }
+    }
 
-	}
-	private void recursiveAdd(Node current, int v){
-		if (v < current.value){
-			if (current.left == null){
-				Node newNode = new Node(v);
-				current.left = newNode;
-				newNode.parent = current;
-				return;
-			}
-			recursiveAdd(current.left, v);
-		} else {
-			if (current.right == null){
-				Node newNode = new Node(v);
-				current.right = newNode;
-				newNode.parent = current;
-				return;
-			}
-			recursiveAdd(current.right, v);
-		}
-	}
+    public void recursiveAdd(int elem){
+        this.size += 1;
+        if (isEmpty()){
+            this.root = new Node(elem);
+        } else {
+            recursiveAdd(root, elem);
+        }
+    }
+    private void recursiveAdd(Node current, int elem){
+        if (elem < current.value){
+            if (current.left == null){
+                Node newNode = new Node(elem);
+                current.left = newNode;
+                newNode.parent = current;
+                return;
+            }
+            recursiveAdd(current.left, elem);
+        } else {
+            if (current.right == null){
+                Node newNode = new Node(elem);
+                current.right = newNode;
+                newNode.parent = current;
+                return;
+            }
+            recursiveAdd(current.right, elem);
+        }
+    }
 
-	public boolean contains(int v){
-		if (isEmpty()) return false;
-		Node aux = this.root;
+    public void remove(int k){
+        Node node = this.search(k);
 
-		while (aux != null){
-			if (v == aux.value) return true;
-			else if (v < aux.value) aux = aux.left;
-			else aux = aux.right;
-		}
+        if (node == null) return;
+        
+        if (node.isLeaf()){
+            //é folha e só tem um elemento na árvore.
+            if (node == this.root){
+                this.root = null;
+            } else {
+                Node parent = node.parent;
 
-		return false;
-	}
+                //verifica se o nó está a esq. ou dir. do pai.
+                if (node.value < parent.value){
+                    parent.left = null;
+                } else {
+                    parent.right = null;
+                }
+            }
+        }
+        //Nó com dois filhos
+        else if (node.hasSonLeft() && node.hasSonRight()){
+            //Procura-se o sucessor para manter a regra de valores menores a esq. e maiores a dir.
+            int value = this.sucessor(k).value;
+            remove(value);
+            node.value = value;
+        }
+        //Nó com apenas um filho
+        else {
+            //Procura-se o filho do nó, a esq. ou dir.
+            Node child = (node.left != null) ? node.left : node.right;
+            
+            //Se for a raiz o nó q desejamos remover, eu atualizo a raiz com o child.
+            if (node == this.root){
+                this.root = child;
+                this.root.parent = null;
+            } else {
 
-	public Node search(int elem){
-		if (isEmpty()) return null;
-		Node aux = this.root;
+                //Verifico se o pai tem valor menor ou maior-igual do que o filho e realizo a remoção.
+                Node parent = node.parent;
+                if (node.value < parent.value) parent.left = child;
+                else parent.right = child;
+                
+                child.parent = parent;
+            }
+        }
+        this.size -= 1;
+    }
 
-		while (aux != null){
-			if (elem == aux.value) return aux;
-			else if (elem < aux.value) aux = aux.left;
-			else aux = aux.right;
-		}
+    public boolean contains(int elem){
+        if (isEmpty()) return false;
+        Node aux = this.root;
 
-		return null;
-	}
+        while (aux != null){
+            if (elem == aux.value) return true;
+            else if (elem < aux.value) aux = aux.left;
+            else aux = aux.right;
+        }
 
-	public Node recursiveSearch(int elem){
-		return recursiveSearch(this.root, elem);
-	}
-	private Node recursiveSearch(Node current, int elem){
-		if (current == null) return null;
-		if (elem == current.value) return current;
-		if (elem < current.value) return recursiveSearch(current.left, elem);
-		else return recursiveSearch(current.right, elem);
-	}
+        return false;
+    }
 
-	public Node min(){
-		if (isEmpty()) return null;
-		return min(this.root);
-	}
-	private Node min(Node aux){
-		if (aux.left == null) return aux;
-		else return min(aux.left);
-	}
+    public Node search(int elem){
+        if (isEmpty()) return null;
+        Node aux = this.root;
 
-	public Node max(){
-		if (isEmpty()) return null;
-		return max(this.root);
-	}
-	private Node max(Node aux){
-		if (aux.right == null) return aux;
-		else return max(aux.right);
-	}
+        while (aux != null){
+            if (elem == aux.value) return aux;
+            else if (elem < aux.value) aux = aux.left;
+            else aux = aux.right;
+        }
 
-	public int contaFolha(){
-		return contaFolha(this.root);
-	}
-	private int contaFolha(Node current){
-		if (current == null) return 0;
-		int value = 0;
+        return aux;
+    }
 
-		if (current.left == null && current.right == null) value += 1;
-		return value + contaFolha(current.left) + contaFolha(current.right);
-	}
+    public Node recursiveSearch(int elem){
+        return recursiveSearch(root, elem);
+    }
+    private Node recursiveSearch(Node current, int elem){
+        if (current == null) return null;
+        if (elem == current.value) return current;
+        else if (elem < current.value) return recursiveSearch(current.left, elem);
+        else return recursiveSearch(current.right, elem);
+    }
 
-	public int height(){
-		return height(this.root);
-	}
-	private int height(Node current){
-		if (current == null) return -1;
-		else return 1 + Math.max(height(current.left), height(current.right));
-	}
+    //Retorno o mín. da árvore.
+    public Node min(){
+        return min(this.root);
+    }
+    //Retorno o min. baseado no nó desejado.
+    private Node min(Node current){
+        if (current.left == null) return current;
+        else return min(current.left); 
+    }
 
-	public Node sucessor(Node current){
-		if (current == null) return null;
-		if (current.right != null) return min(current.right);
-		else{
-			Node aux = current.parent;
+    //Retorno o máx. da árvore.
+    public Node max(){
+        return max(root);
+    }
+    //Retorno o máx. baseado no nó desejado.
+    private Node max(Node current){
+        if (current == null) return null;
+        else return max(current.right);
+    }
 
-			while(aux != null && aux.value < current.value){
-				aux = aux.parent;
-			}
+    //Retorna a qtd. de folhas de uma árvore.
+    public int countLeaf(){
+        return countLeaf(this.root);
+    }
+    private int countLeaf(Node current){
+        if (current == null) return 0;
+        int value = 0;
 
-			return aux;
-		}
-	}
+        if (current.left == null && current.right == null) value += 1;
+        return value + countLeaf(current.left) + countLeaf(current.right);
+    }
 
-	public Node predecessor(Node current){
-		if (current == null) return null;
-		if (current.left != null) return max(current.left);
-		else {
-			Node aux = current.parent;
+    //Retorna a altura da árvore
+    public int height(){
+        return height(this.root);
+    }
+    //Retorna a altura baseado no nó desejado.
+    private int height(Node current){
+        if (current == null) return -1;
+        return 1 + Math.max(height(current.left), height(current.right));
+    }
 
-			while(aux != null && aux.value > current.value){
-				aux = aux.parent;
-			}
+    public Node sucessor(int k){
+        Node current = this.search(k);
+        if (current == null) return null;
+        if (current.right != null) return min(current.right);
+        else {
+            Node aux = current.parent;
 
-			return aux;
-		}
-	}
+            while (aux != null && aux.value < current.value) aux = aux.parent;
+            
+            return aux;
+        }
+    }
 
+    public Node predecessor(int k){
+        Node node = this.search(k);
+
+        if (node == null) return null;
+        if (node.left != null) return max(node.left);
+        else {
+            Node aux = node.parent;
+
+            while (aux != null && aux.value > node.value) aux = aux.parent;
+            
+            return aux;
+        }
+    }
+
+    //Nó, esquerda, direita
+    public ArrayList<Integer> preOrder(){
+        return preOrder(this.root);
+    }
+    private ArrayList<Integer> preOrder(Node current){
+        ArrayList<Integer> path = new ArrayList<>();
+        if (current != null){
+            path.add(current.value);
+            path.addAll(preOrder(current.left));
+            path.addAll(preOrder(current.right));
+        }
+        return path;
+    }
+
+    //Esquerda, nó, direita
+    public ArrayList<Integer> inOrder(){
+        return inOrder(this.root);
+    }
+    private ArrayList<Integer> inOrder(Node current){
+        ArrayList<Integer> path = new ArrayList<>();
+        if (current != null){
+            path.addAll(inOrder(current.left));
+            path.add(current.value);
+            path.addAll(inOrder(current.right));
+        }
+        return path;
+    }
+
+    //Esquerda, direita, nó
+    public ArrayList<Integer> posOrder(){
+        return posOrder(this.root);
+    }
+    private ArrayList<Integer> posOrder(Node current){
+        ArrayList<Integer> path = new ArrayList<>();
+        if (current != null){
+            path.addAll(posOrder(current.left));
+            path.addAll(posOrder(current.right));
+            path.add(current.value);
+        }
+        return path;
+    }
+
+
+    public int size(){
+        return this.size;
+    }
+
+    public Deque<Integer> bsfTree(){
+        Deque<Node> queue = new LinkedList<Node>();
+        Deque<Integer> out = new LinkedList<Integer>();
+
+        if (!isEmpty()){
+            queue.addLast(this.root);
+            while(!queue.isEmpty()){
+                Node aux = queue.removeFirst();
+
+                out.addLast(aux.value);
+
+                if (aux.left != null)
+                    queue.addLast(aux.left);
+
+                if (aux.right != null)
+                    queue.addLast(aux.right);
+            }
+        }
+
+        return out;
+    }
 }
 
 class Node{
-	Node left;
-	Node right;
-	Node parent;
-	int value;
+    int value;
+    Node left;
+    Node right;
+    Node parent;
 
-	public Node(int v){
-		this.value = v;
-		this.right = null;
-		this.left = null;
-		this.parent = null;
-	}
+    public Node(int elem){
+        this.value = elem;
+        this.left = null;
+        this.right = null;
+        this.parent = null;
+    }
+
+    boolean isLeaf(){
+        if (left == null && right == null) return true;
+        return false;
+    }
+
+    boolean hasSonLeft(){
+        if (left != null) return true;
+        return false;
+    }
+
+    boolean hasSonRight(){
+        if (right != null) return true;
+        return false;
+    }
 }
