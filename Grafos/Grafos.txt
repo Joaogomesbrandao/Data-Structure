@@ -1,0 +1,56 @@
+****Definition****
+Informally, we can define a graph as a set V of points (vertices)
+and a set of pairs E of these points (edges).
+
+****Concepts:****
+Degree: the number of edges connected to a vertex.
+Path: sequence of vertices connected by edges.
+Cycle: a path in which the starting and ending vertices are the same.
+
+****Types****
+Undirected graph: Its edges have no direction, which means that the
+relationship between the vertices is bidirectional.
+
+Directed graph (or digraph): is a graph in which all edges have
+guidance.
+
+Weighted graph:
+Edges have an associated weight, which can represent "cost", "distance"
+or any other metric.
+
+Connected graph:
+In a connected graph, there is a path between any pair of vertices.
+
+Planar graph: is a graph that can be immersed in the plane in such a way
+so that their edges do not intersect.
+
+Bipartite graph: a graph that can be divided into two
+sets of vertices S and T, such that:
+- S∪T=V
+- S∩T=∅
+- no vertex of S has an edge with another vertex of S.
+- no vertex of T has an edge with another vertex of T.
+
+Tree (a special type of graph): An acyclic and connected graph. It is a
+particular case of graph.
+
+****Representation****
+Adjacency list: Is a data structure that associates with each vertex a
+list of its adjacent vertices, that is, the vertices with which it has edges.
+
+Adjacency matrix: is ​​a 2D matrix where the rows and columns correspond to the
+vertices, and the value at position [𝑖][𝑗] indicates whether there is an edge
+between the vertex 𝑖 and the vertex j.
+
+****Search****
+DFS (Depth First Search):
+- It uses an auxiliary list (called a visited list).
+- Recursively visits the vertices of a graph.
+- We can use DSF to check the existence of an element or bipartition of a graph.
+- Complexity: O(N + M). (N = number of vertices, M = number of edges).
+
+BSF (Breadth First Search):
+- It is an iterative algorithm (unlike DFS, which is recursive)
+- Uses a queue to keep vertices can be explored
+- We can use BFS to check the shortest path between two vertices
+- Complexity: O(N + M). (N = number of vertices, M = number of edges).

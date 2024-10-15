@@ -297,6 +297,20 @@ public class BST {
 
         return out;
     }
+
+    public void inverteBST(){
+        inverteBST(root);
+    }
+    private void inverteBST(Node node){
+        if (node != null){
+            Node temp = node.left;
+            node.left = node.right;
+            node.right = temp;
+
+            inverteBST(node.left);
+            inverteBST(node.right);
+        }
+    }
 }
 
 class Node{
