@@ -1,0 +1,123 @@
+****Important****
+All these codes were obtained and built from Virtus' EDA course.
+****---------****
+
+****Definition****
+Informally, we can define a graph as a set V of points (vertices)
+and a set of pairs E of these points (edges).
+
+****Concepts:****
+Degree: the number of edges connected to a vertex.
+Path: sequence of vertices connected by edges.
+Cycle: a path in which the starting and ending vertices are the same.
+
+****Types****
+Undirected graph: Its edges have no direction, which means that the
+relationship between the vertices is bidirectional.
+
+Directed graph (or digraph): is a graph in which all edges have
+guidance.
+
+Weighted graph:
+Edges have an associated weight, which can represent "cost", "distance"
+or any other metric.
+
+Connected graph:
+In a connected graph, there is a path between any pair of vertices.
+
+Planar graph: is a graph that can be immersed in the plane in such a way
+so that their edges do not intersect.
+
+Bipartite graph: a graph that can be divided into two
+sets of vertices S and T, such that:
+- S∪T=V
+- S∩T=∅
+- no vertex of S has an edge with another vertex of S.
+- no vertex of T has an edge with another vertex of T.
+
+Tree (a special type of graph): An acyclic and connected graph. It is a
+particular case of graph.
+
+****Representation****
+Adjacency list: Is a data structure that associates with each vertex a
+list of its adjacent vertices, that is, the vertices with which it has edges.
+
+Adjacency matrix: is ​​a 2D matrix where the rows and columns correspond to the
+vertices, and the value at position [𝑖][𝑗] indicates whether there is an edge
+between the vertex 𝑖 and the vertex j.
+
+****Search****
+DFS (Depth First Search):
+- It uses an auxiliary list (called a visited list).
+- Recursively visits the vertices of a graph.
+- We can use DSF to check the existence of an element or bipartition of a graph.
+- Complexity: O(N + M). (N = number of vertices, M = number of edges).
+
+BSF (Breadth First Search):
+- It is an iterative algorithm (unlike DFS, which is recursive)
+- Uses a queue to keep vertices can be explored
+- We can use BFS to check the shortest path between two vertices
+- Complexity: O(N + M). (N = number of vertices, M = number of edges).
+
+****Methods****
+DSU (Disjoint Set Union) - Union Find
+- We are given N sets and a quantity Q of operations that must be
+  carried out in these sets:
+• Join the sets where the elements u and v meet.
+• Calculate the number of elements in the set that u belongs to.
+• Check if u and v are in the same set.
+Note: Initially each set contains only 1 element.
+Can perform two operations in ~log(N) time.
+- Union(u, v)
+• Joins the sets of elements u and v
+- Find(u)
+• Returns the subset that u is in.
+Path compression
+Join the sets of elements u and v.
+• Update one of the parents. O(1)
+- Check if u and v are in the same component.
+-
+• Find the parent of the component of u. log(N)
+• Find the parent of the component of v. log(N)
+• Check if they are the same. O(1)
+-
+Check the size of the component that u is in.
+• Find the parent of the component of u.
+• Check its size. log(N)
+
+MST (Minimum Spanning Tree):
+-A subtree of an undirected connected graph that connects all
+the vertices with the lowest possible total edge weight.
+
+Kruskal's algorithm
+- Store all edges of the graph in a list.
+- Sort all edges from smallest weight to largest.
+- Traverse all edges, and whenever the edge connects 2 vertices that
+are not yet connected, add this edge to the graph.
+Complexity
+- Store all edges of the graph in a list. O(E)
+- Sort all edges from smallest weight to largest. O(E.logE)
+- Traverse all edges, and whenever the edge connects 2 vertices that
+are not yet connected, add this edge to the graph. O(E.logV)
+- Observations
+- E = Number of edges in the graph
+- V = Number of vertices in the graph
+- To check if two vertices are connected we use DSU (logV).
+
+Shortest Path
+Given a vertex u, find for all other vertices v the smallest
+path from u to v.
+• Unweighted graphs
+• Weighted graphs
+
+• Unweighted graphs
+- Use a BFS starting from vertex u.
+- For every vertex v, the shortest path between u and v can be calculated
+using a BFS starting from vertex u.
+
+• Weighted graphs
+- Similar approach to that used for unweighted graphs.
+- Always keep the vertex closest to u at the beginning of the queue and
+has not yet been processed.
+- Consider the weight of the edges to calculate the distance.
+- Always try to calculate a shorter path to the vertex.

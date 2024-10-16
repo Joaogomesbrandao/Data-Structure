@@ -4,7 +4,7 @@ n, m = map(int, input().split())
 
 lista_adj = [[] for x in range(n + 1)]
 
-for i in range(m):
+for _ in range(m):
     u, v = map(int, input().split())
 
     lista_adj[u].append(v)
